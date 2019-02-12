@@ -1,0 +1,10 @@
+{% load crispy_forms_tags %}
+{% if message %}
+    {{message}}
+{% endif %}
+<h1>Login here</h1>
+<form action="{% url 'login' %}" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button>Login</button>
+</form>

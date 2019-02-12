@@ -1,0 +1,43 @@
+{% if user.is_active %}
+<a href="{% url 'post_user_profile' user.id post.user.id %}"><h2>Author : {{post.user.name}}</h2></a>
+<h3>Posted on :  {{post.pub_date}}</h3>
+
+<img src="{{ post.image.url }}" width="1000" height="600">
+
+
+{% if user.name == post.user.name %}
+{% if tags %}
+    <h4>Available tags</h4>
+    <h5>Select from the list of tags or tpe your own tags</h5>
+    <form action="" method="post">
+        {%csrf_token%}
+    {% for tag in tags %}
+        <ul>
+            <input type="checkbox" value="{{tag}}", name="checks[]">{{tag}}
+        </ul>
+    {% endfor %}
+    <button type="submit" value="submit">Submit</button>
+    </form>
+
+    <h3>write tags</h3>
+    <form action="{% url 'user_tags' user.id post.id %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="user_tags">
+        <button type="submit">Add tag</button>
+    </form>
+
+
+{% endif %}
+{% endif %}
+
+{% else %}
+    <p>Login first!!<a href="{% url 'login' %}">Login here</a> </p>
+{%endif%}
+{% if user.name != post.user.name %}
+    <form action="{% url 'like' user.id post.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Like</button>
+    </form>
+{% endif %}
+
+<h4>Likes count :{{ post.likes }}</h4>

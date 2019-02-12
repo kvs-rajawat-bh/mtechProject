@@ -1,0 +1,53 @@
+{% load crispy_forms_tags %}
+{% if user.is_active %}
+
+{% if message %}
+{{message}}
+{% endif %}
+
+<h1>User profile here</h1>
+{{user.name}}<br>
+
+
+<h3>Search posts by tags</h3>
+<form action="{% url 'user_profile' user.id%}" method="get">
+    {% csrf_token %}
+    <input type="text" name="q">
+    <button type="submit">Search</button>
+</form></br>
+
+
+
+
+
+
+
+
+
+{% if query_posts %}
+<h3>Total Matching Posts {{ query_posts_count }}</h3>
+{% for post in query_posts %}
+    <a href="{% url 'post' user.id post.id %}"><img src="{{post.image.url}}" width="200" height="200"></a>
+{% endfor %}
+{% endif %}
+
+
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{post_form|crispy}}
+    <button>Post +</button>
+</form>
+<h3>Some Posts</h3>
+{% for item in user.post_set.all %}
+<a href="{% url 'post'  user.id item.id %}"><img src="{{ item.image.url }}" width="300" height="300"></a>
+{% endfor %}
+{% else %}
+ <h1>Login First!!!<a href="{% url 'login' %}">Click here</a></h1>
+{% endif %}
+
+
+
+
+
+
+
